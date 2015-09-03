@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+
+
+        <bean name="applicationBean" class="eci.arsw.application.Application">
+            <property name="controller" ref="controllerBean"></property>
+        </bean>
+ 
+        <bean name="controllerBean" class="eci.arsw.controller.Controller">
+	</bean>
+        
+        <bean name="auditBean" class="eci.arsw.aop.AuditAspect">
+        </bean>        
+        
+        <aop:aspectj-autoproxy/>       
+        <aop:config>
+            <aop:aspect ref="auditBean">
+                <aop:pointcut id="auditPointcut" expression="execution(* eci.arsw.controller.Controller.*(..))"/>
+                <aop:before method="auditBefore" pointcut-ref="auditPointcut"/>
+            </aop:aspect>
+        </aop:config>
+    
+</beans>
